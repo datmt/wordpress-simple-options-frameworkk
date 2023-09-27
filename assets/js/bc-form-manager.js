@@ -107,6 +107,10 @@
                     else
                         data[input_name] = '';
                 }
+            } else if (input.is('select')) {
+                input_value = input.val();
+                if (typeof input_value != 'undefined')
+                    data[input_name] = input_value;
             } else {
                 input_value = input.val();
                 if (typeof input_value != 'undefined' && input_value.trim() !== '')

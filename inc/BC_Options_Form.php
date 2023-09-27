@@ -369,7 +369,7 @@ class BC_Options_Form
         $html .= $label;
 
         $html .= '<div><img class="bc2018fw-image-preview" src="' . ($current_value > 0 ? wp_get_attachment_image_src($current_value)[0] : '') . '" /></div>';
-        $html .= sprintf('<p><a class="bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s>%2$s</a></p>', $disabled, $button_title);
+        $html .= sprintf('<p><a class="bc2018fw-button-small bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s> <span bc2018fw-icon="image"></span> %2$s</a></p>', $disabled, $button_title);
         $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s data-bc2018fw-field="%5$s"  />', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled, $setting_field_name);
 
         return $html . '</div>';
@@ -439,33 +439,33 @@ class BC_Options_Form
      * Echos an select element
      *
      * @param $setting_field_name
-     * @param $values
+     * @param $values array associated array of value => text
      * @param bool $disabled
      * @return string
      */
-    public function select($setting_field_name, $values, $label = '',
-                           $disabled = false, $multiple = false)
+    public function select($setting_field_name, $values, $label = '', $disabled = false, $multiple = false)
     {
 
         $current_value = $this->get_option_value($setting_field_name);
 
+
         $multiple_text = $multiple ? 'multiple' : '';
 
-//        dump($current_value);
         $multiple_markup = $multiple ? '[]' : '';
         $disabled = $disabled ? 'disabled' : '';
-        $html = sprintf('<select class="bc2018fw-select" %2$s name="%1$s%4$s" %3$s data-bc2018fw-field="%4$s">', $this->generate_form_field($setting_field_name), $disabled, $multiple_text, $multiple_markup, $setting_field_name);
+        $html = sprintf('<select class="bc2018fw-select" %2$s name="%1$s%4$s" %3$s data-bc2018fw-field="%5$s">',
+            $this->generate_form_field($setting_field_name), $disabled, $multiple_text, $multiple_markup, $setting_field_name);
 
-        foreach ($values as $v => $text) {
+        foreach ($values as $value => $text) {
             if (!$multiple)
-                $selected = $v == $current_value ? 'selected' : '';
+                $selected = $value == $current_value ? 'selected' : '';
             else {
                 if (is_array($current_value))
-                    $selected = in_array($v, $current_value) ? 'selected' : '';
+                    $selected = in_array($value, $current_value) ? 'selected' : '';
                 else
                     $selected = '';
             }
-            $html .= sprintf('<option value="%1$s" %3$s>%2$s</option>', $v, $text, $selected);
+            $html .= sprintf('<option value="%1$s" %3$s>%2$s</option>', $value, $text, $selected);
         }
 
         if ($label != '')

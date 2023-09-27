@@ -45,7 +45,7 @@ class Main
 
         echo $option_form->textarea('some_textarea', 'Enter something');
 
-
+        echo $option_form->select('select_something', ['a' => 'A', 'b' => 'B', 'c' => 'C'], 'Select something', false, true);
 
 
         echo $option_form->setting_fields();
