@@ -40,7 +40,7 @@ class Main
             ], 'row', 'Choose your car'
         );
 
-        echo $option_form->multiple_checkbox('selected_sports', false, '', ['football', 'tennis']);
+        echo $option_form->multiple_checkbox('selected_sports', false, 'Your favoriate sports', ['football', 'tennis']);
 
 
         echo $option_form->textarea('some_textarea', 'Enter something', 'This is a placeholder');
