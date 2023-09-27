@@ -139,6 +139,8 @@
                 all_fields_name.push(field_name);
         });
         data['all_fields_name'] = all_fields_name;
+        const spinner = the_button.find('.bc2018fw-spinner');
+        spinner.show();
         $.post(ajaxurl, data, function (response) {
             Swal.fire(
                 '',
@@ -146,6 +148,7 @@
                 'info'
             )
 
+            spinner.hide();
             if (typeof (response.redirect_url) !== 'undefined') {
                 const current_tab = the_button.closest('.bc-single-tab').attr('id');
                 window.location.href = response.redirect_url + '&active_tab=' + current_tab;

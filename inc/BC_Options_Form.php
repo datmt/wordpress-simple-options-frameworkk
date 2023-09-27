@@ -443,7 +443,7 @@ class BC_Options_Form
      * @param bool $disabled
      * @return string
      */
-    public function select($setting_field_name, $values, $label = '', $disabled = false, $multiple = false)
+    public function select($setting_field_name, $values, $label = '', $disabled = false, $multiple = false, $width = 400)
     {
 
         $current_value = $this->get_option_value($setting_field_name);
@@ -453,8 +453,8 @@ class BC_Options_Form
 
         $multiple_markup = $multiple ? '[]' : '';
         $disabled = $disabled ? 'disabled' : '';
-        $html = sprintf('<select class="bc2018fw-select" %2$s name="%1$s%4$s" %3$s data-bc2018fw-field="%5$s">',
-            $this->generate_form_field($setting_field_name), $disabled, $multiple_text, $multiple_markup, $setting_field_name);
+        $html = sprintf('<select style="width: %6$s" class="bc2018fw-select" %2$s name="%1$s%4$s" %3$s data-bc2018fw-field="%5$s">',
+            $this->generate_form_field($setting_field_name), $disabled, $multiple_text, $multiple_markup, $setting_field_name, $width . 'px');
 
         foreach ($values as $value => $text) {
             if (!$multiple)
@@ -469,8 +469,8 @@ class BC_Options_Form
         }
 
         if ($label != '')
-            $html = sprintf('<label for="%1$s">%2$s</label>', $setting_field_name, $label) . $html;
-        return $html . '</select>';
+            $html = sprintf('<div><label for="%1$s">%2$s</label></div>', $setting_field_name, $label) . $html;
+        return '<div>'. $html . '</select></div>';
     }
 
     /**
@@ -586,7 +586,7 @@ class BC_Options_Form
 
     public function submit_button($text)
     {
-        return sprintf('<div><button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc2018fw-form-submit-button" >%1$s</button></div>', $text);
+        return sprintf('<span><button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary  bc2018fw-button bc2018fw-form-submit-button" ><span class="bc2018fw-spinner" style="display: none;" bc2018fw-spinner="ratio: 0.5"></span> %1$s</button></div>', $text);
     }
 
 }
