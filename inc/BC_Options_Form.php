@@ -207,7 +207,7 @@ class BC_Options_Form
      * @param bool $echo
      * @return string
      */
-    public function notice($content, $type, $closable = false, $echo = true)
+    public function notice($content, $type, $closable = false)
     {
 
         switch ($type) {
@@ -235,12 +235,7 @@ class BC_Options_Form
 
         $closable = $closable ? '<a class="bc2018fw-alert-close" bc2018fw-close></a>' : '';
 
-        $output = sprintf('<div class="%1$s" bc2018fw-alert> %2$s <p>%3$s</p> </div>', $type_class, $closable, $content);
-
-        if ($echo)
-            echo $output;
-        else
-            return $output;
+        return sprintf('<div class="%1$s" bc2018fw-alert> %2$s <p>%3$s</p> </div>', $type_class, $closable, $content);
 
     }
 
@@ -254,13 +249,13 @@ class BC_Options_Form
     {
         $current_value = $this->get_option_value($setting_field_name, 'string');
 
-        echo sprintf('<input type="hidden" name="%1$s" value="%2$s" data-bc2018fw-field="%3$s" />', $this->generate_form_field($setting_field_name), $current_value, $setting_field_name);
+        return sprintf('<input type="hidden" name="%1$s" value="%2$s" data-bc2018fw-field="%3$s" />', $this->generate_form_field($setting_field_name), $current_value, $setting_field_name);
 
     }
 
     public function raw_hidden($key, $value)
     {
-        echo sprintf('<input type="hidden" name="%1$s" value="%2$s" />', $key, $value);
+        return sprintf('<input type="hidden" name="%1$s" value="%2$s" />', $key, $value);
     }
 
     /**
@@ -269,13 +264,9 @@ class BC_Options_Form
      * @param $field_id
      * @param string $text
      */
-    public static function label($field_id, $text, $echo = true)
+    public static function label($field_id, $text)
     {
-        $output = sprintf('<label for="%1$s" class="bc2018fw-form-label">%2$s</label>', $field_id, $text);
-        if ($echo)
-            echo $output;
-        else
-            return $output;
+        return sprintf('<label for="%1$s" class="bc2018fw-form-label">%2$s</label>', $field_id, $text);
     }
 
     /**
@@ -490,16 +481,9 @@ class BC_Options_Form
      * @return string
      *
      */
-    public function heading($content, $level = 1, $echo = true)
+    public function heading($content, $level = 1)
     {
-
-        $output = sprintf('<div class="bc-doc-heading-%1$s">%2$s</div>', $level, $content);
-
-        if ($echo)
-            echo $output;
-        else
-            return $output;
-
+        return sprintf('<div class="bc-doc-heading-%1$s">%2$s</div>', $level, $content);
     }
 
 
@@ -545,11 +529,10 @@ class BC_Options_Form
      */
     public function textarea($setting_field_name, $placeholder = '', $disabled = false)
     {
-
         $current_value = $this->get_option_value($setting_field_name);
 
         $disabled = $disabled ? 'disabled' : '';
-        echo sprintf('<textarea name="%1$s" placeholder="%4$s" class="bc2018fw-textarea"  %3$s data-bc2018fw-field="%5$s">%2$s</textarea>', $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder, $setting_field_name);
+        return sprintf('<textarea name="%1$s" placeholder="%4$s" class="bc2018fw-textarea"  %3$s data-bc2018fw-field="%5$s">%2$s</textarea>', $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder, $setting_field_name);
     }
 
 
@@ -593,26 +576,9 @@ class BC_Options_Form
         return $html;
     }
 
-    public function card_section($title, $content, $echo = true)
+    public function hr()
     {
-        $html = '<div class="bc2018fw-card-body bc2018fw-card bc2018fw-card-default">';
-        $html .= sprintf('<div class="bc-doc-heading-2">%1$s</div>', $title);
-
-        $html .= implode("", $content) . '</div>';
-
-        if ($echo)
-            echo $html;
-        else
-            return $html;
-    }
-
-
-    public function hr($echo = false)
-    {
-        if ($echo)
-            echo '<hr class="bc2018fw-hr" />';
-        else
-            return '<hr class="bc2018fw-hr" />';
+        return '<hr class="bc2018fw-hr" />';
     }
 
     public function submit_button($text)

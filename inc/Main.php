@@ -42,6 +42,12 @@ class Main
 
         echo $option_form->multiple_checkbox('selected_sports', false, '', ['football', 'tennis']);
 
+
+        echo $option_form->textarea('some_textarea', 'Enter something');
+
+
+
+
         echo $option_form->setting_fields();
         echo $option_form->submit_button('Save');
 
