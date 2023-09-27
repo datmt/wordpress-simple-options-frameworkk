@@ -6,7 +6,7 @@
  * Time: 9:42 AM
  */
 
-namespace BinaryCarpenter\BC_OFW;
+namespace BinaryCarpenter\BC_FW;
 class Core
 {
     const MENU_SLUG = 'bccomvn_wp_plugins_myn_menu';

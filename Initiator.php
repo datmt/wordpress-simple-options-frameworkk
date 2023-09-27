@@ -10,7 +10,7 @@
  * Text Domain: bc_option_framework
  */
 
-namespace BinaryCarpenter\BC_OFW;
+namespace BinaryCarpenter\BC_FW;
 
 require __DIR__ . '/inc/Core.php';
 require __DIR__ . '/inc/Config.php';
@@ -53,7 +53,7 @@ class Initiator
             __('<img style="max-width: 1rem; max-height: 1rem;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAARZSURBVFiFxZdbbBRVHIe/uex0ZrcLpcWWiIUiEawahBhu9dIHvKAG0jsYiAiJCSESiShCoIAtKAR8Kcb4UlBo2lIqFwFpK8QQEFhMFHlBH0pBrluw6ba0u+3OzPFhsW7dtrsNW/y9TDLnzHzfnPOfOXPgf450/ygDw8PO3wOCQFJYn3jHB9iSZhgFsqyUJ+hGT8uU7FcaX5xbdKVs5buz4oaTkGRZVVBVB0KIwL22oGUGF0lGorul7IdfRqSNyYgba6Dc7RK0m9ByrYntudN9smUGjYcFB0hUQzOanD4O0zJd8kMj348UVlESoeIbVDraWjGD3XETilngfMNhls1IZ0X2OBY9k0L56rfx32t/OAKeukPs2/o+31UUcOPcfO6cyiZT/5nt78xC2PbQCggh2LlhOfvK83hqYhqmkY6m63y24glSHF7OHjs4tAKtd7woks2E8SNDJyQZoboBmJ01nMsXzg6tgJHoxufrwLLChtoOAuBtMXGOSO332h9rK+hoa30wAd3pYtrLs/n8y9CTSmYHstnGdW+AiqPNvDCnsM/rdhe/x/4NyyiZM31ACTWaAMCSki/YtPBVfr1Yw+ypCre8nZQf9LJgXRmp6RkR/Ss2r+LP499yIv9J9ly6y8Y3p7L+sAd3UnJEX0nTdX9tY7seTcIyTU4eqOTqb6dwjRzDS7kLGTV2XJ/wpvpqavIycZpd2P4AX11spvq2wvrDHrRhydz0CwA+npJsxiwQS8LhLk0BQHR29pJYfchDW8KIHoF+a0AIMSj4Nxs/4NrxGmrz/4UDSE4nsqGzdFIq+akmW3Nn4g+riT4Fqrd8yIrsx2nx3owZfvPkfqpzJmI4lIj2fySWT04jb2Q3O+fN6JGIEKjcsorrnipWvjWcksKsqBLR4H1JFDwSkrBMU+71FlRtW0uT5wh1u+aSxA2chkJJYRbFNT+RMmp0xE0rNn3EtRO17M3PHBDeS0LA8slpOC4280ljQO4Zgapta7l85gBHq+ZjpIzFdGWwOGc065akUFKYxV+3b/SGb15FU8Ne9v5nzqMmQQNg6aRU3LomFEVV11ndHerlMwc4UjkPd2ICQOhzKys8N95mmNOidM0Opr1RhDNxWJ/VHnNsG9HVBcCOC82o3YGAfuXcQb6vno/LqfXqa+mPArA4B4SA0qLnyZz5Gi3n66mNcdijRU7QNetI5bwIeLiE6cpgSe5oJozqxuc5GrXgBiWgKrLoDx4usbrsFr5bJntyno4bHGJcC4pL6zl9/DqV+VMGP+dREnU1LC6t53Td71TmTYo7PKrA+tJ6Th+7NGRwAFlSHJ2NV30RDWs2HONswx9UFzwbX3gg9Ed9pb0LRUvolDTDyNcc6tfuRE2TpdA+0DQtvN5WR1qS09bUAT6vkpAkQotW0JJNW0DmY2n+Txe9frtoy+6MoGX37AJkQAJZFrYsJIm2oOgKWPaC/janDxI/EADcDFzkPuDBfqnjkb8BHB2pCGCM/lgAAAAASUVORK5CYII="  alt="bc auto thumb"> ' . Config::PLUGIN_MENU_NAME, 'bc-menu-cart-woo'),
             'manage_options',
             Config::PLUGIN_SLUG,
-            array('\BinaryCarpenter\BC_OFW\Main', 'ui')
+            array('\BinaryCarpenter\BC_FW\Main', 'ui')
         );
     }
 }

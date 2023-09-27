@@ -8,7 +8,7 @@
  * class to manage options (options are stored in custom post meta)
  */
 
-namespace BinaryCarpenter\BC_OFW;
+namespace BinaryCarpenter\BC_FW;
 
 use WP_Query;
 

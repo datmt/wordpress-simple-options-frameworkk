@@ -6,9 +6,9 @@
  * Time: 10:10 AM
  */
 
-namespace BinaryCarpenter\BC_OFW;
+namespace BinaryCarpenter\BC_FW;
 
-use BinaryCarpenter\BC_OFW\Config as Config;
+use BinaryCarpenter\BC_FW\Config as Config;
 
 /**
  * Class BC_Options_Form

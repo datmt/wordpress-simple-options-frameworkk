@@ -1,12 +1,12 @@
 <?php
 
-namespace BinaryCarpenter\BC_OFW;
+namespace BinaryCarpenter\BC_FW;
 
-use BinaryCarpenter\BC_OFW\Config as Config;
+use BinaryCarpenter\BC_FW\Config as Config;
 
 /**
  * Class Main
- * @package BinaryCarpenter\BC_MNC
+ * @package BinaryCarpenter\BC_FW
  */
 class Main
 {

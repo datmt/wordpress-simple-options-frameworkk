@@ -7,9 +7,9 @@
  * Always put this in a subfolder of the plugin root
  */
 
-namespace BinaryCarpenter\BC_OFW;
+namespace BinaryCarpenter\BC_FW;
 
-use BinaryCarpenter\BC_OFW\Config as Config;
+use BinaryCarpenter\BC_FW\Config as Config;
 
 
 class Activation

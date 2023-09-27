@@ -6,7 +6,7 @@
  * Time: 8:57 AM
  */
 
-namespace BinaryCarpenter\BC_OFW;
+namespace BinaryCarpenter\BC_FW;
 
 
 /**
