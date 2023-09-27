@@ -527,12 +527,15 @@ class BC_Options_Form
      * @param string $placeholder
      * @param bool $disabled
      */
-    public function textarea($setting_field_name, $placeholder = '', $disabled = false)
+    public function textarea($setting_field_name, $placeholder = '', $label = '', $disabled = false, $width = 400, $rows = 5)
     {
         $current_value = $this->get_option_value($setting_field_name);
 
         $disabled = $disabled ? 'disabled' : '';
-        return sprintf('<textarea name="%1$s" placeholder="%4$s" class="bc2018fw-textarea"  %3$s data-bc2018fw-field="%5$s">%2$s</textarea>', $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder, $setting_field_name);
+        $template = '<div>
+                 <div><label>%8$s</label></div>
+                <textarea  style="width: %6$s" rows="%7$s" name="%1$s" placeholder="%4$s" class="bc2018fw-textarea"  %3$s data-bc2018fw-field="%5$s">%2$s</textarea></div>';
+        return sprintf($template, $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder, $setting_field_name, $width.'px', $rows, $label);
     }
 
 
