@@ -53,24 +53,9 @@ class BC_Options_Form
         return $this->option_post_id;
     }
 
-    public function js_post_form()
-    { ?>
-
-        <script>
-
-            
-
-        </script>
-
-
-        <?php
-
-
-    }
 
     public static function handle_post_save_options()
     {
-
         if (Config::IS_PRO && !Activation::is_activated()) {
             wp_send_json(array(
                 'error' => true,
@@ -84,9 +69,8 @@ class BC_Options_Form
             die();
         }
 
-
         //check nonce and update the options
-        if (!wp_verify_nonce(sanitize_text_field($_POST['bcofw_form_security']), sanitize_text_field($_POST['action']))) {
+        if (!wp_verify_nonce(sanitize_text_field($_POST['bc2018fw-form-security']), sanitize_text_field($_POST['action']))) {
             wp_send_json(array(
                 'status' => 'Error',
                 'message' => 'You do not have the necessary rights to perform this action'
@@ -95,6 +79,8 @@ class BC_Options_Form
         }
 
         $option_name = sanitize_text_field($_POST['option_name']);
+        error_log($option_name);
+
         $option_post_id = intval($_POST['option_post_id']);
         $option_object = new BC_Options($option_name, $option_post_id);
         //save the settings
@@ -132,10 +118,12 @@ class BC_Options_Form
      */
     public function setting_fields()
     {
-        echo sprintf('<input type="hidden" name="action" value="%1$s" />', $this->get_action_name());
-        echo sprintf('<input type="hidden" name="option_post_id" value="%1$s" />', $this->option_post_id);
-        echo sprintf('<input type="hidden" name="option_name" value="%1$s" />', $this->option_name);
-        wp_nonce_field($this->get_action_name(), "bcofw_form_security");
+        $html = sprintf('<input type="hidden" name="action" value="%1$s" />', $this->get_action_name());
+        $html .= sprintf('<input type="hidden" name="option_post_id" value="%1$s" />', $this->option_post_id);
+        $html .= sprintf('<input type="hidden" name="option_name" value="%1$s" />', $this->option_name);
+        $html .= wp_nonce_field($this->get_action_name(), "bc2018fw-form-security", true, false);
+
+        return $html;
     }
 
 
@@ -264,7 +252,7 @@ class BC_Options_Form
      */
     public static function label($field_id, $text, $echo = true)
     {
-        $output = sprintf('<label for="%1$s" class="bc2018-form-label">%2$s</label>', $field_id, $text);
+        $output = sprintf('<label for="%1$s" class="bc2018fw-form-label">%2$s</label>', $field_id, $text);
         if ($echo)
             echo $output;
         else
@@ -330,16 +318,19 @@ class BC_Options_Form
     {
         return '<div class="bc2018fw">';//open a scope
     }
+
     public function close_container()
     {
         return '</div> <!-- close container -->';
     }
 
-    public function open_form() {
-       return '<form id="'.$this->form_css_id.'"> <!-- open form -->';
+    public function open_form()
+    {
+        return '<form id="' . $this->form_css_id . '"> <!-- open form -->';
     }
 
-    public function close_form() {
+    public function close_form()
+    {
         return '</form> <!-- close form -->';
     }
 
@@ -350,7 +341,7 @@ class BC_Options_Form
         $disabled = $disabled ? 'disabled' : '';
         $html = '';
         if ($label != '')
-            $html .= sprintf('<label class="bc2018-form-label" for="%1$s">%2$s</label>', $setting_field_name, $label);
+            $html .= sprintf('<label class="bc2018fw-form-label" for="%1$s">%2$s</label>', $setting_field_name, $label);
         $html .= sprintf('<div class="bc2018fw-form-controls"><input class="bc2018fw-input" type="%1$s" id="%2$s" name="%2$s" value="%3$s" %4$s style="width: %5$s;"/></div>', $type, $this->generate_form_field($setting_field_name), $current_value, $disabled, $width . 'px');
         return $html;
     }
@@ -362,11 +353,11 @@ class BC_Options_Form
         $current_value = $this->get_option_value($setting_field_name);
         $html = '<div class="bc2018fw-image-picker">';
 
-        $label = $label != '' ? sprintf('<label class="bc2018-form-label">%1$s</label>', $label) : '';
+        $label = $label != '' ? sprintf('<label class="bc2018fw-form-label">%1$s</label>', $label) : '';
 
         $html .= $label;
 
-        $html .= '<div><img class="bc2018fw-image-preview" src="' . ($current_value > 0? wp_get_attachment_image_src($current_value)[0] : '') . '" /></div>';
+        $html .= '<div><img class="bc2018fw-image-preview" src="' . ($current_value > 0 ? wp_get_attachment_image_src($current_value)[0] : '') . '" /></div>';
         $html .= sprintf('<p><a class="bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s>%2$s</a></p>', $disabled, $button_title);
         $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s/>', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled);
 
@@ -526,8 +517,6 @@ class BC_Options_Form
      */
     public function radio($setting_field_name, $values, $layout = 'row', $label_type = 'text', $title = '', $dimensions = array(16, 16))
     {
-
-
         $current_value = $this->get_option_value($setting_field_name);
 
         $html = '';
@@ -563,7 +552,6 @@ class BC_Options_Form
                 default:
                     $top_row[] = sprintf('<p>%1$s</p>', $label_content);
                     break;
-
             }
 
 
@@ -584,7 +572,7 @@ class BC_Options_Form
 
 
         if ($title != '')
-            $html = sprintf('<label class="bc2018-form-label">%1$s</label>', $title) . $html;
+            $html = sprintf('<label class="bc2018fw-form-label">%1$s</label>', $title) . $html;
 
         return $html;
 
@@ -624,7 +612,7 @@ class BC_Options_Form
         $disabled = $disabled ? 'disabled' : '';
         $state = checked(1, $current_value, false);
         return '<div>' .
-            sprintf('<label class="bc2018-form-label" for="%1$s"><input type="checkbox" name="%1$s" %2$s %3$s class="bc2018fw-checkbox" value="1" id="%2$s" /> %4$s &nbsp;&nbsp;</label>', $this->generate_form_field($setting_field_name), $state, $disabled, $label)
+            sprintf('<label class="bc2018fw-form-label" for="%1$s"><input type="checkbox" name="%1$s" %2$s %3$s class="bc2018fw-checkbox" value="1" id="%2$s" /> %4$s &nbsp;&nbsp;</label>', $this->generate_form_field($setting_field_name), $state, $disabled, $label)
             . '</div>';
 
     }
@@ -653,8 +641,7 @@ class BC_Options_Form
 
     public function submit_button($text)
     {
-
-        echo sprintf('<button data-bcfw-form-id="'.$this->form_css_id.'" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc2018fw-form-submit-button" >%1$s</button>', $text);
+        return sprintf('<button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc2018fw-form-submit-button" >%1$s</button>', $text);
     }
 
 }
