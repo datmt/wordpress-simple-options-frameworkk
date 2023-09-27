@@ -1,3 +1,9 @@
+body {
+    background: transparent;
+}
+#wpfooter {
+    display: none;
+}
 input[type=checkbox]:checked::before {
     content: unset;
 }
