@@ -268,9 +268,9 @@ class BC_Options_Form
     {
         $html = '';
         if ($field_id == '') {
-            $html = sprintf('<label class="bc2018fw-form-label">%1$s</label>', $text);
+            $html = sprintf('<label class="bc2018fw-form-label bc2018fw-text-bold">%1$s</label>', $text);
         } else {
-            $html = sprintf('<label for="%1$s" class="bc2018fw-form-label">%2$s</label>', $field_id, $text);
+            $html = sprintf('<label for="%1$s" class="bc2018fw-form-label bc2018fw-text-bold">%2$s</label>', $field_id, $text);
         }
 
         return '<div>'.$html.'</div>';
