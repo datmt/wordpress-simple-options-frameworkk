@@ -32,6 +32,14 @@ class Main
 
         echo $option_form->single_checkbox('food_for_thought', '', 'Check me if you want to');
 
+        echo $option_form->radio('car_choice',
+            [
+                ['label' => 'BMW', 'value' => 'bmw', 'disabled' => false],
+                ['label' => 'Mercedes', 'value' => 'mercedes', 'disabled' => true],
+                ['label' => 'Audi', 'value' => 'audi', 'disabled' => false],
+            ], 'row', 'Choose your car'
+        );
+
         echo $option_form->multiple_checkbox('selected_sports', false, '', ['football', 'tennis']);
 
         echo $option_form->setting_fields();

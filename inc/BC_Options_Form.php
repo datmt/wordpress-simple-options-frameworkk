@@ -362,7 +362,7 @@ class BC_Options_Form
         if ($label != '')
             $html .= sprintf('<label class="bc2018fw-form-label" for="%1$s">%2$s</label>', $setting_field_name, $label);
         $html .= sprintf('<div class="bc2018fw-form-controls"><input class="bc2018fw-input" type="%1$s" id="%2$s" name="%2$s" value="%3$s" %4$s style="width: %5$s; data-bc2018fw-field="%6$s"/></div>', $type, $this->generate_form_field($setting_field_name), $current_value, $disabled, $width . 'px', $setting_field_name);
-        
+
         return $html;
     }
 
@@ -508,72 +508,30 @@ class BC_Options_Form
      * values: value => label pair or
      *  value => array(label, disabled, postfix)
      * @param $setting_field_name
-     * @param $values
+     * @param $values array of  associative array[['label' => '', 'value' => '', 'disabled' => false, 'postfix' => ''
      * @param string $layout
      * @param $label_type string either: text (normal text), image(image url), icon_font (icon class)
      * @param string $title
      * @param array $dimensions width and height of image or icon, default 16 x 16
      * @return string
      */
-    public function radio($setting_field_name, $values, $layout = 'row', $label_type = 'text', $title = '', $dimensions = array(16, 16))
+    public function radio($setting_field_name, $values, $layout = 'row', $title = '')
     {
         $current_value = $this->get_option_value($setting_field_name);
+        $html = sprintf('<div class="bc2018fw-radio-group bc2018fw-radio-group-%1$s"><div>%2$s</div>', $layout, $title);
+        foreach ($values as $singleRadio) {
+            $value = $singleRadio['value'];
+            $label = $singleRadio['label'];
+            $disabled = $singleRadio['disabled'];
 
-        $html = '';
+            $checked = $value == $current_value ? 'checked' : '';
 
-        $top_row = array();
-        $bottom_row = array();
+            $radio = sprintf('<input class="bc2018fw-radio bc2018-single-radio" type="radio" name="%1$s" value="%2$s" %3$s %4$s data-bc2018fw-field="%5$s"/> ', $this->generate_form_field($setting_field_name), $value, $checked, $disabled, $setting_field_name);
 
-
-        //$label is actually an array ['label', 'disabled'] e.g. ['content' => 'Option 1', 'disabled' => false]
-        foreach ($values as $v => $label_array) {
-            $checked = $v == $current_value ? 'checked' : '';
-            $disabled = $label_array['disabled'] ? 'disabled' : '';
-            $label_content = $label_array['content'];
-
-            $radio = sprintf('<input class="bc2018fw-radio" type="radio" name="%1$s" value="%2$s" %3$s %4$s data-bc2018fw-field="%5$s"/> ', $this->generate_form_field($setting_field_name), $v, $checked, $disabled, $setting_field_name);
-
-            switch ($label_type) {
-                case 'text':
-
-                    $top_row[] = sprintf('<span>%1$s %2$s&nbsp;&nbsp;</span>', $radio, $label_content);
-
-                    break;
-                case 'image':
-
-                    $top_row[] = sprintf('<a href="%1$s" data-rel="lightcase"><img style="width: %2$s; height: %3$s; margin: auto;" src="%1$s" /></a>', $label_content, $dimensions[0] > 0 ? $dimensions[0] . 'px' : '', $dimensions[1] > 0 ? $dimensions[1] . 'px' : '');
-                    $bottom_row[] = $radio;
-                    break;
-                case 'icon_font':
-                    $top_row[] = sprintf('<i class="%1$s"></i>', $label_content);
-                    $bottom_row[] = $radio;
-                    break;
-                default:
-                    $top_row[] = sprintf('<p>%1$s</p>', $label_content);
-                    break;
-            }
-
-
+            $html .= sprintf('<span>%1$s %2$s&nbsp;&nbsp;</span>', $radio, $label);
         }
 
-
-        $top_row_string = '';
-
-        $bottom_row_string = '';
-
-        foreach ($top_row as $content)
-            $top_row_string .= '<td>' . $content . '</td>';
-
-        foreach ($bottom_row as $content)
-            $bottom_row_string .= '<td>' . $content . '</td>';
-
-        $html = sprintf('<table><tbody><tr style="text-align: center;">%1$s</tr><tr style="text-align: center;">%2$s</tr></tbody></table>', $top_row_string, $bottom_row_string);
-
-
-        if ($title != '')
-            $html = sprintf('<label class="bc2018fw-form-label">%1$s</label>', $title) . $html;
-
-        return $html;
+        return $html . '</div>';
 
     }
 
@@ -659,7 +617,7 @@ class BC_Options_Form
 
     public function submit_button($text)
     {
-        return sprintf('<button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc2018fw-form-submit-button" >%1$s</button>', $text);
+        return sprintf('<div><button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc2018fw-form-submit-button" >%1$s</button></div>', $text);
     }
 
 }
