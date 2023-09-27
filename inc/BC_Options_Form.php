@@ -58,110 +58,7 @@ class BC_Options_Form
 
         <script>
 
-            (function ($) {
-
-                $(function () {
-                    //save the settings on key press
-                    $(window).bind('keydown', function (event) {
-                        if (event.ctrlKey || event.metaKey) {
-                            switch (String.fromCharCode(event.which).toLowerCase()) {
-                                case 's':
-                                    event.preventDefault();
-                                    //save all forms
-                                    _.each($('.bc-form-submit-button'), function (the_button) {
-                                        save_form($(the_button));
-                                    });
-
-                                    break;
-
-                            }
-                        }
-                    });
-
-
-                    $('.bc-form-submit-button').on('click', function (e) {
-                        e.preventDefault();
-                        save_form($(this));
-                    });
-
-                    $(document).on('click', '.add-data-row', function () {
-                        add_data_row($(this));
-                    });
-                    $(document).on('click', '.minus-data-row', function () {
-                        remove_data_row($(this));
-                    });
-
-                });
-
-                function save_form(the_button) {
-                    const data = {};
-                    const formId = the_button.attr('data-bcfw-form-id');
-                    _.each($(`#${formId}`).find('input, select, textarea').not('.bc-no-key-field'), function (i) {
-
-                        let input = $(i);
-                        let input_name = (input).attr('name');
-                        let input_value = undefined;
-
-                        //for checkbox, get value of the checked one
-                        if (input.attr('type') === 'checkbox')
-                            input_value = input.is(":checked");
-                        else if (input.attr('type') === 'radio') {
-                            //for radio input, since there are many radios share the same name, only get the value of checked radio
-                            if (input.is(':checked'))
-                                input_value = input.val();
-                        } else
-                            input_value = input.val();
-
-
-                        if (typeof (input_value) !== 'undefined')
-                            data[input_name] = input_value;
-
-
-                    });
-
-                    _.each(the_button.closest('form').find('.bc-key-array-assoc-data-field'), function (field) {
-                        var data_rows = {};
-
-                        _.each($(field).find('.bc-single-data-row'), function (single_data_row) {
-
-                            const data_key = $(single_data_row).find('.bc-single-data-value').eq(0).val();
-                            const data_value = $(single_data_row).find('.bc-single-data-value').eq(1).val();
-                            if (data_key !== '')
-                                data_rows[data_key] = data_value;
-                        });
-
-                        data[$(field).attr('data-name')] = data_rows;
-
-                    });
-
-                    $.post(ajaxurl, data, function (response) {
-                        swal('', response.message, 'info');
-                        if (typeof (response.redirect_url) !== 'undefined') {
-                            var current_tab = the_button.closest('.bc-single-tab').attr('id');
-                            window.location.href = response.redirect_url + '&active_tab=' + current_tab;
-                        }
-                    });
-                }
-
-                //add one more data ro
-                function add_data_row(add_button) {
-                    //clone current row
-                    const clone = add_button.closest('.bc-single-data-row').clone();
-                    add_button.closest('[data-name]').append(clone);
-                }
-
-                function remove_data_row(remove_button) {
-                    const current_row = remove_button.closest('.bc-single-data-row');
-                    //don't remove if it's the last row
-                    const data_field = remove_button.closest('[data-name]');
-
-                    if (data_field.find('.bc-single-data-row').length <= 1)
-                        return;
-                    current_row.remove();
-                }
-
-
-            })(jQuery);
+            
 
         </script>
 
@@ -459,19 +356,19 @@ class BC_Options_Form
     }
 
 
-    public function image_picker($setting_field_name, $button_title, $label, $disabled)
+    public function single_image_picker($setting_field_name, $button_title, $label, $disabled)
     {
         $disabled = $disabled ? 'disabled' : '';
         $current_value = $this->get_option_value($setting_field_name);
-        $html = '<div class="bc-image-picker">';
+        $html = '<div class="bc2018fw-image-picker">';
 
         $label = $label != '' ? sprintf('<label class="bc2018-form-label">%1$s</label>', $label) : '';
 
         $html .= $label;
 
-        $html .= '<img class="bc_image_preview" src="' . $current_value . '" />';
-        $html .= sprintf('<a class="bc-doc__image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s>%2$s</a>', $disabled, $button_title);
-        $html .= sprintf('<input type="hidden" id="%1$s" class="bc_image_picker_hidden_input" name="%1$s" value="%3$s" %4$s/>', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled);
+        $html .= '<div><img class="bc2018fw-image-preview" src="' . ($current_value > 0? wp_get_attachment_image_src($current_value)[0] : '') . '" /></div>';
+        $html .= sprintf('<p><a class="bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s>%2$s</a></p>', $disabled, $button_title);
+        $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s/>', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled);
 
         return $html . '</div>';
     }
@@ -757,7 +654,7 @@ class BC_Options_Form
     public function submit_button($text)
     {
 
-        echo sprintf('<button data-bcfw-form-id="'.$this->form_css_id.'" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc-form-submit-button" >%1$s</button>', $text);
+        echo sprintf('<button data-bcfw-form-id="'.$this->form_css_id.'" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc2018fw-form-submit-button" >%1$s</button>', $text);
     }
 
 }

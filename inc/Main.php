@@ -27,7 +27,7 @@ class Main
         echo $option_form->open_form();
 
         echo $option_form->input_field('some_settings', 'text', 'Enter something');
-        echo $option_form->image_picker('main_image', 'select image', 'Pick any image', false);
+        echo $option_form->single_image_picker('main_image', 'select image', 'Pick any image', false);
         $option_form->js_post_form();
         $option_form->setting_fields();
         $option_form->submit_button('Save');

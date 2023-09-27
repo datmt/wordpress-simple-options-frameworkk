@@ -25,7 +25,6 @@ class Initiator
         add_action('admin_menu', array($this, 'add_menu'));
         add_action('admin_enqueue_scripts', array($this, 'load_admin_styles_and_scritps'), 10);
         add_action('wp_ajax_' . BC_Options_Form::BC_OPTION_COMMON_AJAX_ACTION, array(BC_Options_Form::class, 'handle_post_save_options'));
-
     }
 
     public function load_admin_styles_and_scritps()
@@ -35,10 +34,12 @@ class Initiator
         if (stripos($screen->id, Config::PLUGIN_SLUG)) {
             wp_enqueue_style('bc-ofw-admin-uikit-style', plugins_url('assets/css/uikit.min.css', __FILE__));
             wp_enqueue_style('bc-ofw-admin-style', plugins_url('assets/css/admin.css', __FILE__));
-            wp_enqueue_script('bc-ofw-admin-sweetalert-script', plugins_url('assets/js/sweetalert.min.js', __FILE__), array('jquery'));
-            wp_enqueue_script('bc-ofw-admin-uikit-script', plugins_url('assets/js/uikit.min.js', __FILE__), array('jquery'));
-            wp_enqueue_script('bc-ofw-admin-uikit-icon-script', plugins_url('assets/js/uikit-icons.min.js', __FILE__), array('jquery'));
-//            wp_enqueue_script('bc-ofw-admin-script', plugins_url('assets/js/admin.min.js', __FILE__), array('jquery'));
+            wp_enqueue_script('bc-ofw-admin-sweetalert-script', plugins_url('assets/js/sweetalert.min.js', __FILE__));
+            wp_enqueue_script('bc-ofw-admin-uikit-script', plugins_url('assets/js/uikit.min.js', __FILE__) );
+            wp_enqueue_script('bc-ofw-admin-uikit-icon-script', plugins_url('assets/js/uikit-icons.min.js', __FILE__) );
+            wp_enqueue_media();
+            wp_enqueue_script('bc-ofw-admin-form-manager-script', plugins_url('assets/js/bc-form-manager.js', __FILE__),
+                array('jquery', 'bc-ofw-admin-uikit-script', 'bc-ofw-admin-uikit-icon-script', 'bc-ofw-admin-sweetalert-script'));
         }
     }
 
