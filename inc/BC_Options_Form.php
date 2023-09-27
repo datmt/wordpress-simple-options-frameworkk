@@ -470,7 +470,7 @@ class BC_Options_Form
 
         if ($label != '')
             $html = sprintf('<div><label for="%1$s">%2$s</label></div>', $setting_field_name, $label) . $html;
-        return '<div>'. $html . '</select></div>';
+        return '<div>' . $html . '</select></div>';
     }
 
     /**
@@ -535,7 +535,7 @@ class BC_Options_Form
         $template = '<div>
                  <div><label>%8$s</label></div>
                 <textarea  style="width: %6$s" rows="%7$s" name="%1$s" placeholder="%4$s" class="bc2018fw-textarea"  %3$s data-bc2018fw-field="%5$s">%2$s</textarea></div>';
-        return sprintf($template, $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder, $setting_field_name, $width.'px', $rows, $label);
+        return sprintf($template, $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder, $setting_field_name, $width . 'px', $rows, $label);
     }
 
 
@@ -587,6 +587,24 @@ class BC_Options_Form
     public function submit_button($text)
     {
         return sprintf('<span><button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary  bc2018fw-button bc2018fw-form-submit-button" ><span class="bc2018fw-spinner" style="display: none;" bc2018fw-spinner="ratio: 0.5"></span> %1$s</button></div>', $text);
+    }
+
+
+    public function open_tabs($tabs_id = '')
+    {
+        $tabs_id = $tabs_id == '' ? uniqid('bc-tabs-') : $tabs_id;
+        return sprintf('<ul bc2018fw-tab class="bc2018fw-tabs" id="%1$s">', $tabs_id);
+    }
+
+    public function single_tab_content($tab_content, $active = false)
+    {
+        $template = '<li class="bc2018fw-tab-content %1$s">%2$s</li>';
+        return sprintf($template, $active ? 'bc2018fw-active' : '', $tab_content);
+    }
+
+    public function close_tabs()
+    {
+        return '</ul> <!-- close tabs -->';
     }
 
 }
