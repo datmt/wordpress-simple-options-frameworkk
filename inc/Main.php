@@ -24,8 +24,15 @@ class Main
         $option_form = new BC_Options_Form(Config::OPTION_NAME, $option_id);
 
         echo $option_form->open_container();
+        echo $option_form->open_form();
+
         echo $option_form->input_field('some_settings', 'text', 'Enter something');
+        echo $option_form->image_picker('main_image', 'select image', 'Pick any image', false);
         $option_form->js_post_form();
+        $option_form->setting_fields();
+        $option_form->submit_button('Save');
+
+        echo $option_form->close_form();
         echo $option_form->close_container();
 
     }

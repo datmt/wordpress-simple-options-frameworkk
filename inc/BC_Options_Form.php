@@ -95,7 +95,7 @@ class BC_Options_Form
 
                 function save_form(the_button) {
                     const data = {};
-                    const formId = the_button.attr('bcfw-form-id');
+                    const formId = the_button.attr('data-bcfw-form-id');
                     _.each($(`#${formId}`).find('input, select, textarea').not('.bc-no-key-field'), function (i) {
 
                         let input = $(i);
@@ -433,10 +433,17 @@ class BC_Options_Form
     {
         return '<div class="bc2018fw">';//open a scope
     }
-
     public function close_container()
     {
         return '</div> <!-- close container -->';
+    }
+
+    public function open_form() {
+       return '<form id="'.$this->form_css_id.'"> <!-- open form -->';
+    }
+
+    public function close_form() {
+        return '</form> <!-- close form -->';
     }
 
     public function input_field($setting_field_name, $type = 'text', $label = '', $disabled = false, $width = 200)
@@ -686,16 +693,6 @@ class BC_Options_Form
 
     }
 
-    public static function flex_section($content, $flex_class = 'bc2018fw-flex-left')
-    {
-        $html = sprintf('<div class="bc2018fw-flex %1$s">', $flex_class);
-
-        foreach ($content as $c)
-            $html .= sprintf('<div>%1$s</div>', $c);
-
-        return $html . '</div>';
-    }
-
 
     /**
      * Echos an input text element
@@ -760,7 +757,7 @@ class BC_Options_Form
     public function submit_button($text)
     {
 
-        echo sprintf('<button name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc-form-submit-button" >%1$s</button>', $text);
+        echo sprintf('<button data-bcfw-form-id="'.$this->form_css_id.'" name="submit"  type="submit" class="bc2018fw-button-primary bc2018fw-button bc-form-submit-button" >%1$s</button>', $text);
     }
 
 }
