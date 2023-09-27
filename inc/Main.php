@@ -29,6 +29,11 @@ class Main
 
         echo $option_form->input_field('some_settings', 'text', 'Enter something');
         echo $option_form->single_image_picker('main_image', 'select image', 'Pick any image', false);
+
+        echo $option_form->single_checkbox('food_for_thought', '', 'Check me if you want to');
+
+        echo $option_form->multiple_checkbox('selected_sports', false, '', ['football', 'tennis']);
+
         echo $option_form->setting_fields();
         echo $option_form->submit_button('Save');
 

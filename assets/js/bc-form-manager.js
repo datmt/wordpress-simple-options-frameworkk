@@ -81,6 +81,8 @@
     function save_form(the_button) {
         const data = {};
         const formId = the_button.attr('data-bcfw-form-id');
+
+        //store all fields name to delete the empty ones in the backend
         _.each($(`#${formId}`).find('input, select, textarea').not('.bc-no-key-field'), function (i) {
 
             let input = $(i);
@@ -88,18 +90,27 @@
             let input_value = undefined;
 
             //for checkbox, get value of the checked one
-            if (input.attr('type') === 'checkbox')
-                input_value = input.is(":checked");
-            else if (input.attr('type') === 'radio') {
-                //for radio input, since there are many radios share the same name, only get the value of checked radio
-                if (input.is(':checked'))
+            if (input.attr('type') === 'checkbox') {
+                data[input_name] = data[input_name] || [];
+                if (input.is(':checked')) {
                     input_value = input.val();
-            } else
+                    if (typeof input_value != 'undefined' && input_value.trim() !== '')
+                        data[input_name].push(input_value);
+
+                }
+            } else if (input.attr('type') === 'radio') {
+                //for radio input, since there are many radios share the same name, only get the value of checked radio
+                if (input.is(':checked')) {
+                    input_value = input.val();
+                    if (typeof input_value != 'undefined' && input_value.trim() !== '')
+                        data[input_name] = input_value;
+                    else
+                        data[input_name] = '';
+                }
+            } else {
                 input_value = input.val();
-
-
-            if (typeof (input_value) !== 'undefined') {
-                data[input_name] = input_value;
+                if (typeof input_value != 'undefined' && input_value.trim() !== '')
+                    data[input_name] = input_value;
             }
         });
 
@@ -117,7 +128,13 @@
             data[$(field).attr('data-name')] = data_rows;
 
         });
-
+        const all_fields_name = [];
+        _.each(the_button.closest('form').find('input, select, textarea').not('.bc-no-key-field'), function (i) {
+            const field_name = $(i).attr('data-bc2018fw-field');
+            if (all_fields_name.indexOf(field_name) === -1)
+                all_fields_name.push(field_name);
+        });
+        data['all_fields_name'] = all_fields_name;
         $.post(ajaxurl, data, function (response) {
             Swal.fire(
                 '',

@@ -82,7 +82,20 @@ class BC_Options_Form
         error_log($option_name);
 
         $option_post_id = intval($_POST['option_post_id']);
+
+        $all_fields = $_POST['all_fields_name'];
+
         $option_object = new BC_Options($option_name, $option_post_id);
+
+        //delete all fields of the form first before updating
+        foreach ($all_fields as $key => $value) {
+
+            error_log($key . ' deleting field: ' . $value);
+
+        }
+        $option_object->delete_all_fields($all_fields);
+
+
         //save the settings
         foreach ($_POST[$option_name] as $key => $value) {
             $option_object->set($key, $value);
@@ -158,6 +171,12 @@ class BC_Options_Form
     {
         return sprintf('%1$s[%2$s]', $this->option_name, $option_form_field);
     }
+
+    private function generate_multiple_checkbox_form_field($option_form_field)
+    {
+        return sprintf('%1$s[%2$s][]', $this->option_name, $option_form_field);
+    }
+
 
     /**
      * Returns nonce field HTML
@@ -235,7 +254,7 @@ class BC_Options_Form
     {
         $current_value = $this->get_option_value($setting_field_name, 'string');
 
-        echo sprintf('<input type="hidden" name="%1$s" value="%2$s" />', $this->generate_form_field($setting_field_name), $current_value);
+        echo sprintf('<input type="hidden" name="%1$s" value="%2$s" data-bc2018fw-field="%3$s" />', $this->generate_form_field($setting_field_name), $current_value, $setting_field_name);
 
     }
 
@@ -342,7 +361,8 @@ class BC_Options_Form
         $html = '';
         if ($label != '')
             $html .= sprintf('<label class="bc2018fw-form-label" for="%1$s">%2$s</label>', $setting_field_name, $label);
-        $html .= sprintf('<div class="bc2018fw-form-controls"><input class="bc2018fw-input" type="%1$s" id="%2$s" name="%2$s" value="%3$s" %4$s style="width: %5$s;"/></div>', $type, $this->generate_form_field($setting_field_name), $current_value, $disabled, $width . 'px');
+        $html .= sprintf('<div class="bc2018fw-form-controls"><input class="bc2018fw-input" type="%1$s" id="%2$s" name="%2$s" value="%3$s" %4$s style="width: %5$s; data-bc2018fw-field="%6$s"/></div>', $type, $this->generate_form_field($setting_field_name), $current_value, $disabled, $width . 'px', $setting_field_name);
+        
         return $html;
     }
 
@@ -359,7 +379,7 @@ class BC_Options_Form
 
         $html .= '<div><img class="bc2018fw-image-preview" src="' . ($current_value > 0 ? wp_get_attachment_image_src($current_value)[0] : '') . '" /></div>';
         $html .= sprintf('<p><a class="bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s>%2$s</a></p>', $disabled, $button_title);
-        $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s/>', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled);
+        $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s data-bc2018fw-field="%5$s"  />', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled, $setting_field_name);
 
         return $html . '</div>';
     }
@@ -402,7 +422,7 @@ class BC_Options_Form
 
         //.bc-key-array-assoc-data-field: this is the container for two select fields
         //
-        return sprintf('<div class="bc-key-select-select bc-key-array-assoc-data-field" data-name="%1$s">%2$s</div>', $this->generate_form_field($setting_field_name), $html);
+        return sprintf('<div class="bc-key-select-select bc-key-array-assoc-data-field" data-name="%1$s" data-bc2018fw-field="%3$s">%2$s</div>', $this->generate_form_field($setting_field_name), $html, $setting_field_name);
 
     }
 
@@ -423,26 +443,6 @@ class BC_Options_Form
         return sprintf('<div class="bc-single-data-row bc2018fw-flex">%1$s %2$s %3$s </div>', $html, $minus_sign, $add_sign);
     }
 
-    /**
-     * print the select, without field name.
-     * @param array $values_array must be an associative array
-     */
-    private function raw_select($values_array, $selected_value, $multiple = false, $disabled = false)
-    {
-        //set an empty value for the select so users can unset the value
-        $html = '<option value=""></option>';
-        foreach ($values_array as $value => $name) {
-
-            $selected = $value == $selected_value ? 'selected' : '';
-            $html .= sprintf('<option value="%1$s" %2$s>%3$s</option>', $value, $selected, $name);
-        }
-
-        $multiple = $multiple ? 'multiple' : '';
-        //mark this select field as bc-no-key-field so js will exclude it later when saving values later
-        //.bc-single-data-value: this class is used to retrieved the value when saving form
-        $disable = $disabled ? 'disabled' : '';
-        return sprintf('<select class="bc2018fw-select bc-no-key-field bc-single-data-value" %1$s %2$s>%3$s</select>', $multiple, $disable, $html);
-    }
 
     /**
      * Echos an select element
@@ -463,7 +463,7 @@ class BC_Options_Form
 //        dump($current_value);
         $multiple_markup = $multiple ? '[]' : '';
         $disabled = $disabled ? 'disabled' : '';
-        $html = sprintf('<select class="bc2018fw-select" %2$s name="%1$s%4$s" %3$s>', $this->generate_form_field($setting_field_name), $disabled, $multiple_text, $multiple_markup);
+        $html = sprintf('<select class="bc2018fw-select" %2$s name="%1$s%4$s" %3$s data-bc2018fw-field="%4$s">', $this->generate_form_field($setting_field_name), $disabled, $multiple_text, $multiple_markup, $setting_field_name);
 
         foreach ($values as $v => $text) {
             if (!$multiple)
@@ -531,8 +531,7 @@ class BC_Options_Form
             $disabled = $label_array['disabled'] ? 'disabled' : '';
             $label_content = $label_array['content'];
 
-
-            $radio = sprintf('<input class="bc2018fw-radio" type="radio" name="%1$s" value="%2$s" %3$s %4$s/> ', $this->generate_form_field($setting_field_name), $v, $checked, $disabled);
+            $radio = sprintf('<input class="bc2018fw-radio" type="radio" name="%1$s" value="%2$s" %3$s %4$s data-bc2018fw-field="%5$s"/> ', $this->generate_form_field($setting_field_name), $v, $checked, $disabled, $setting_field_name);
 
             switch ($label_type) {
                 case 'text':
@@ -592,7 +591,7 @@ class BC_Options_Form
         $current_value = $this->get_option_value($setting_field_name);
 
         $disabled = $disabled ? 'disabled' : '';
-        echo sprintf('<textarea name="%1$s" placeholder="%4$s" class="bc2018fw-textarea"  %3$s>%2$s</textarea>', $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder);
+        echo sprintf('<textarea name="%1$s" placeholder="%4$s" class="bc2018fw-textarea"  %3$s data-bc2018fw-field="%5$s">%2$s</textarea>', $this->generate_form_field($setting_field_name), $current_value, $disabled, $placeholder, $setting_field_name);
     }
 
 
@@ -604,17 +603,36 @@ class BC_Options_Form
      * @param string $label
      * @return string
      */
-    public function checkbox($setting_field_name, $disabled = false, $label = '')
+    public function single_checkbox($setting_field_name, $disabled = false, $label = '')
     {
 
-        $current_value = $this->get_option_value($setting_field_name, 'bool');
+        $current_value = $this->get_option_value($setting_field_name, 'array');
 
         $disabled = $disabled ? 'disabled' : '';
-        $state = checked(1, $current_value, false);
-        return '<div>' .
-            sprintf('<label class="bc2018fw-form-label" for="%1$s"><input type="checkbox" name="%1$s" %2$s %3$s class="bc2018fw-checkbox" value="1" id="%2$s" /> %4$s &nbsp;&nbsp;</label>', $this->generate_form_field($setting_field_name), $state, $disabled, $label)
-            . '</div>';
+        $state = checked(1, count($current_value) > 0 ? $current_value[0] : 0, false);
+        return
+            sprintf('<label class="bc2018fw-form-label" for="%1$s">
+                            <input type="checkbox" name="%1$s" %2$s %3$s class="bc2018fw-checkbox" value="1" id="%2$s" data-bc2018fw-field="%5$s" /> %4$s &nbsp;&nbsp;</label>',
+                $this->generate_form_field($setting_field_name), $state, $disabled, $label, $setting_field_name);
 
+
+    }
+
+    public function multiple_checkbox($setting_field_name, $disabled = false, $label = '', $values = array())
+    {
+        $current_value = $this->get_option_value($setting_field_name, 'array');
+
+        $disabled = $disabled ? 'disabled' : '';
+        $html = '';
+        foreach ($values as $value) {
+
+            error_log('typeof value' . gettype($value));
+            $checked = in_array($value, $current_value) ? 'checked' : '';
+            $html .= sprintf('<label class="bc2018fw-form-label" for="%1$s">
+                            <input type="checkbox" name="%1$s[]" %2$s %3$s class="bc2018fw-checkbox" value="%4$s" id="%1$s" data-bc2018fw-field="%5$s" /> %4$s &nbsp;&nbsp;</label>',
+                $this->generate_form_field($setting_field_name), $checked, $disabled, $value, $setting_field_name);
+        }
+        return $html;
     }
 
     public function card_section($title, $content, $echo = true)

@@ -231,11 +231,22 @@ class BC_Options
         $value = $value === "true" ? true : $value;
         $value = $value === "false" ? false : $value;
 
+        error_log("saving meta $key with value $value");
         //sanitize key
         $key = sanitize_text_field($key);
         if ($raw)
             update_post_meta($this->post_id, $key, sanitize_text_field($value));
         else
             update_post_meta($this->post_id, $key, serialize($value));
+    }
+
+    public function delete_all_fields($all_fields)
+    {
+        foreach ($all_fields as $field) {
+            error_log("deleting $field");
+            $result = delete_post_meta($this->post_id, $field);
+
+            error_log("deleting field $field with result $result");
+        }
     }
 }
