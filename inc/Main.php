@@ -26,37 +26,40 @@ class Main
 
         echo $option_form->open_container();
 
-        echo $option_form->open_tabs([['heading' => 'First', 'content' => '<h1>First tab</h1>'], ['heading' => 'Second', 'content' => '<h1>Second tab</h1>']]);
 
-        echo $option_form->open_form();
+        $first_tab_content =
+            $option_form->open_form()
 
-        echo $option_form->input_field('some_settings', 'text', 'Enter something');
-        echo $option_form->single_image_picker('main_image', 'select image', 'Pick any image', false);
+            . $option_form->input_field('some_settings', 'text', 'Enter something')
+            . $option_form->single_image_picker('main_image', 'select image', 'Pick any image', false)
 
-        echo $option_form->multiple_image_picker('multiple_images', 'select images', 'Pick many images', false, 100);
-
-
-        echo $option_form->single_checkbox('food_for_thought', '', 'Check me if you want to');
-
-        echo $option_form->radio('car_choice',
-            [
-                ['label' => 'BMW', 'value' => 'bmw', 'disabled' => false],
-                ['label' => 'Mercedes', 'value' => 'mercedes', 'disabled' => true],
-                ['label' => 'Audi', 'value' => 'audi', 'disabled' => false],
-            ], 'row', 'Choose your car'
-        );
-
-        echo $option_form->multiple_checkbox('selected_sports', false, 'Your favoriate sports', ['football', 'tennis']);
-
-        echo $option_form->textarea('some_textarea', 'Enter something', 'This is a placeholder');
-
-        echo $option_form->select('select_something', ['a' => 'A', 'b' => 'B', 'c' => 'C'], 'Select something', false, true);
+            . $option_form->multiple_image_picker('multiple_images', 'select images', 'Pick many images', false, 100)
 
 
-        echo $option_form->setting_fields();
-        echo $option_form->submit_button('Save');
+            . $option_form->single_checkbox('food_for_thought', '', 'Check me if you want to')
 
-        echo $option_form->close_form();
+            . $option_form->radio('car_choice',
+                [
+                    ['label' => 'BMW', 'value' => 'bmw', 'disabled' => false],
+                    ['label' => 'Mercedes', 'value' => 'mercedes', 'disabled' => true],
+                    ['label' => 'Audi', 'value' => 'audi', 'disabled' => false],
+                ], 'row', 'Choose your car'
+            )
+
+            . $option_form->multiple_checkbox('selected_sports', false, 'Your favorite sports', ['football', 'tennis'])
+
+            . $option_form->textarea('some_textarea', 'Enter something', 'This is a placeholder')
+
+            . $option_form->select('select_something', ['a' => 'A', 'b' => 'B', 'c' => 'C'], 'Select something', false, true)
+
+
+            . $option_form->setting_fields()
+            . $option_form->submit_button('Save')
+
+            . $option_form->close_form();
+
+        echo $option_form->open_tabs([['heading' => 'First', 'content' => $first_tab_content], ['heading' => 'Second tab', 'content' => '<h1>Second tab</h1>']]);
+
         echo $option_form->close_container();
 
     }

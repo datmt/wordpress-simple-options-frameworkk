@@ -383,7 +383,8 @@ class BC_Options_Form
         $html = '';
         if ($label != '')
             $html .= $this->print_label($label, $this->generate_form_field($setting_field_name));
-        $html .= sprintf('<div class="bc2018fw-form-controls"><input class="bc2018fw-input" type="%1$s" id="%2$s" name="%2$s" value="%3$s" %4$s style="width: %5$s; data-bc2018fw-field="%6$s"/></div>', $type, $this->generate_form_field($setting_field_name), $current_value, $disabled, $width . 'px', $setting_field_name);
+        $html .= sprintf('<div class="bc2018fw-form-controls"><input class="bc2018fw-input" type="%1$s" id="%2$s" name="%2$s" value="%3$s" %4$s style="width: %5$s;" data-bc2018fw-field="%6$s"/></div>',
+            $type, $this->generate_form_field($setting_field_name), $current_value, $disabled, $width . 'px', $setting_field_name);
 
         return '<div class="bc2018fw-margin">' . $html . '</div>';
     }
@@ -647,19 +648,19 @@ class BC_Options_Form
 
     public function submit_button($text)
     {
-        return sprintf('<span><button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary  bc2018fw-button bc2018fw-form-submit-button" ><span class="bc2018fw-spinner" style="display: none;" bc2018fw-spinner="ratio: 0.5"></span> %1$s</button></div>', $text);
+        return sprintf('<div><button data-bcfw-form-id="' . $this->form_css_id . '" name="submit"  type="submit" class="bc2018fw-button-primary  bc2018fw-button bc2018fw-form-submit-button" ><span class="bc2018fw-spinner" style="display: none;" bc2018fw-spinner="ratio: 0.5"></span> %1$s</button></div>', $text);
     }
 
 
     public function open_tabs($tabs, $tabs_id = '', $active_tab_index = 0)
     {
         $tabs_id = $tabs_id == '' ? uniqid('bc-tabs-') : $tabs_id;
-        $headings = sprintf('<ul class="bc2018fw-tab" bc2018fw-tab data-bc2018fw-tab="{connect: \'#%1$s\'}">', $tabs_id);
+        $headings = sprintf('<ul  bc2018fw-tab>');
 
         //$tabs is an array of array('heading' => '', 'content' => '')aaa
         //print the heading first
         foreach ($tabs as $index => $tab) {
-            $headings .= sprintf('<li class="bc2018fw-tab-heading %1$s" data-tab-index="%2$s"><a href="">%3$s</a></li>', $index == $active_tab_index ? 'bc2018fw-active' : '', $index, $tab['heading']) ;
+            $headings .= sprintf('<li class="%1$s" data-tab-index="%2$s"><a href="">%3$s</a></li>', $index == $active_tab_index ? 'bc2018fw-active' : '', $index, $tab['heading']) ;
         }
 
         //close the tab header
@@ -669,24 +670,23 @@ class BC_Options_Form
         $content = sprintf('<ul id="%1$s" class="bc2018fw-switcher bc2018fw-margin">', $tabs_id);
 
         //print the content
-        foreach ($tabs as $index => $tab) {
-            $content .= $this->single_tab_content($tab['content'], $index == $active_tab_index);
+        foreach ($tabs as $tab) {
+            error_log('loading tab');
+            $content .= $this->single_tab_content($tab['content']);
         }
 
-        return $headings . $content . '</ul>';
+        $content .= '</ul><!-- close tab content -->';
+        error_log($content);
+        return $headings . $content;
 
     }
 
-    public function single_tab_content($tab_content, $active = false)
+    public function single_tab_content($tab_content)
     {
-        $template = '<li class="bc2018fw-tab-content %1$s">%2$s</li>';
-        return sprintf($template, $active ? 'bc2018fw-active' : '', $tab_content);
+        return sprintf('<li class="bc2018fw-tab-content">%1$s</li>', $tab_content);
     }
 
-    public function close_tabs()
-    {
-        return '</ul> <!-- close tabs -->';
-    }
+
 
     private function print_hidden_images_inputs($existing_images, $setting_field_name)
     {
