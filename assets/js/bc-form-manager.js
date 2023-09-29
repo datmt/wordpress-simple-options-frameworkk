@@ -39,21 +39,41 @@
             open_single_media_selector(image_placeholder_element, image_input_field_element)
         });
 
+        $('.bc2018fw-multiple-images-picker-button').on('click', function (e) {
+            const parent = $(this).closest('.bc2018fw-multiple-image-picker');
+            const images_container_container = parent.find('.bc2018fw-multiple-image-picker-images').first();
+            const images_hidden_input_container = parent.find('.bc2018fw-hidden-multi-images-picker-inputs').first();
+            const field_name = parent.attr('data-field-name');
+            open_multiple_media_selector(images_container_container, images_hidden_input_container, field_name);
+        });
+
+
     });
 
 
-    function open_multiple_media_selector(images_placeholder_div_id, image_input_field_id) {
+    function open_multiple_media_selector(images_container_container, images_hidden_input_container, field_name) {
         const frame = wp.media({
-            title: "select ",
+            title: "select images",
             button: {
-                text: "Use these medias",
+                text: "Select these medias",
             },
             multiple: true,
         });
 
         frame.on("select", function () {
             const attachments = frame.state().get("selection").toJSON();
-            //@TODO: implement this
+            console.log('selected', attachments);
+            let images_html = '';
+            let hidden_inputs_html = '';
+            _.each(attachments, function (attachment) {
+                //create images elements and hidden input elements and populate to the containers
+                images_html += `<img style="max-width: 250px;" class="bc2018fw-image-preview" src="${attachment.url}" data-attachment-id="${attachment.id}"/>` ;
+                hidden_inputs_html += `<input type="hidden" name="${field_name}[]" value="${attachment.id}"/>`;
+            });
+
+            //clear the container and populate with new values
+            images_container_container.html(images_html);
+            images_hidden_input_container.html(hidden_inputs_html);
         });
 
         frame.open();
@@ -113,8 +133,17 @@
                     data[input_name] = input_value;
             } else {
                 input_value = input.val();
-                if (typeof input_value != 'undefined' && input_value.trim() !== '')
-                    data[input_name] = input_value;
+                if (input_name.substring(input_name.length - 2) === '[]') {
+                    //this is multiple value field
+                    data[input_name] = data[input_name] || [];
+                    if (typeof input_value != 'undefined' && input_value.trim() !== '')
+                        data[input_name].push(input_value);
+                } else {
+                    if (typeof input_value != 'undefined' && input_value.trim() !== '')
+                        data[input_name] = input_value;
+                }
+
+
             }
         });
 

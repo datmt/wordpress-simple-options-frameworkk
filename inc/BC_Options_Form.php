@@ -172,6 +172,24 @@ class BC_Options_Form
         return sprintf('%1$s[%2$s]', $this->option_name, $option_form_field);
     }
 
+    /**
+     * @param string $html
+     * @param $attachment_ids
+     * @return string
+     */
+    public function display_multiple_images($attachment_ids): string
+    {
+        $html = '<div class="bc2018fw-multiple-image-picker-images">';
+
+        if (is_array($attachment_ids) && count($attachment_ids) > 0) {
+            foreach ($attachment_ids as $attachment_id) {
+                $html .= $this->print_image_from_attachment_id($attachment_id);
+            }
+        }
+        $html .= '</div>';
+        return $html;
+    }
+
     private function generate_multiple_checkbox_form_field($option_form_field)
     {
         return sprintf('%1$s[%2$s][]', $this->option_name, $option_form_field);
@@ -253,7 +271,7 @@ class BC_Options_Form
 
     }
 
-    public function raw_hidden($key, $value)
+    public function raw_hidden($key, $value) : string
     {
         return sprintf('<input type="hidden" name="%1$s" value="%2$s" />', $key, $value);
     }
@@ -274,6 +292,12 @@ class BC_Options_Form
         }
 
         return '<div>' . $html . '</div>';
+    }
+
+    public function print_label_with_field_id($text, $field_id)
+    {
+        $field_id = $this->generate_form_field($field_id);
+        return $this->print_label($text, $field_id);
     }
 
     /**
@@ -375,11 +399,42 @@ class BC_Options_Form
 
         $html .= $label;
 
-        $html .= '<div><img style="max-width: 250px;" class="bc2018fw-image-preview" src="' . ($current_value > 0 && is_array(wp_get_attachment_image_src($current_value)) > 0 ? wp_get_attachment_image_src($current_value,'medium')[0] : '') . '" /></div>';
+        $html .= sprintf('<div>%1$s</div>', $this->print_image_from_attachment_id($current_value));
         $html .= sprintf('<p><a class="bc2018fw-button-small bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s> <span bc2018fw-icon="image"></span> %2$s</a></p>', $disabled, $button_title);
         $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s data-bc2018fw-field="%5$s"  />', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled, $setting_field_name);
 
         return $html . '</div>';
+    }
+
+    public function multiple_image_picker($setting_field_name, $button_title, $label, $disabled)
+    {
+        $disabled = $disabled ? 'disabled' : '';
+        $existing_images = $this->get_option_value($setting_field_name);//this is an array
+        $html = '<div data-field-name="'.$this->generate_form_field($setting_field_name).'" class="bc2018fw-margin bc2018fw-multiple-image-picker"> <!-- multiple image picker -->';
+
+        $html .= ($label != '' ? $this->print_label_with_field_id($label, $setting_field_name) : '');
+
+        $html .= $this->display_multiple_images($existing_images);
+
+        $html .= $this->print_hidden_images_inputs($existing_images, $setting_field_name);
+
+        $html .= sprintf('<p><a class="bc2018fw-button-small bc2018fw-multiple-images-picker-button bc2018fw-button bc2018fw-button-primary" %1$s> <span bc2018fw-icon="image"></span> %2$s</a></p>', $disabled, $button_title);
+        return $html . '</div> <!-- close multiple image picker -->';
+    }
+
+    private function print_image_from_attachment_id($attachment_id, $max_width = 250)
+    {
+        if ($attachment_id <= 0) {
+            error_log('invalid attachment id ' . $attachment_id);
+            return '';
+        }
+        $attachment_info = wp_get_attachment_image_src($attachment_id, 'medium');
+
+        if (!is_array($attachment_info) || count($attachment_info) == 0) {
+            error_log('invalid attachment info ' . $attachment_id);
+            return '';
+        }
+        return sprintf('<img style="max-width: %1$spx;" class="bc2018fw-image-preview" src="%2$s" data-attachment-id="%3$s"/>', $max_width, $attachment_info[0], $attachment_id);
     }
 
 
@@ -611,5 +666,19 @@ class BC_Options_Form
     public function close_tabs()
     {
         return '</ul> <!-- close tabs -->';
+    }
+
+    private function print_hidden_images_inputs($existing_images, $setting_field_name)
+    {
+        $html = '<div class="bc2018fw-hidden-multi-images-picker-inputs">';
+        if (!is_array($existing_images)) {
+            return $html;
+        }
+        foreach ($existing_images as $image_id) {
+            $html .= $this->raw_hidden($this->generate_form_field($setting_field_name) . '[]', $image_id);
+        }
+
+        return $html. '</div>';
+
     }
 }
