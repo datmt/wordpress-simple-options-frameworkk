@@ -273,7 +273,7 @@ class BC_Options_Form
             $html = sprintf('<label for="%1$s" class="bc2018fw-form-label bc2018fw-text-bold">%2$s</label>', $field_id, $text);
         }
 
-        return '<div>'.$html.'</div>';
+        return '<div>' . $html . '</div>';
     }
 
     /**
@@ -375,7 +375,7 @@ class BC_Options_Form
 
         $html .= $label;
 
-        $html .= '<div><img class="bc2018fw-image-preview" src="' . ($current_value > 0 ? wp_get_attachment_image_src($current_value)[0] : '') . '" /></div>';
+        $html .= '<div><img style="max-width: 250px;" class="bc2018fw-image-preview" src="' . ($current_value > 0 && is_array(wp_get_attachment_image_src($current_value)) > 0 ? wp_get_attachment_image_src($current_value,'medium')[0] : '') . '" /></div>';
         $html .= sprintf('<p><a class="bc2018fw-button-small bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s> <span bc2018fw-icon="image"></span> %2$s</a></p>', $disabled, $button_title);
         $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s data-bc2018fw-field="%5$s"  />', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled, $setting_field_name);
 
