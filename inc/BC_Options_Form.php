@@ -389,17 +389,17 @@ class BC_Options_Form
     }
 
 
-    public function single_image_picker($setting_field_name, $button_title, $label, $disabled)
+    public function single_image_picker($setting_field_name, $button_title, $label, $disabled, $image_max_width = 100)
     {
         $disabled = $disabled ? 'disabled' : '';
         $current_value = $this->get_option_value($setting_field_name);
-        $html = '<div class="bc2018fw-margin bc2018fw-image-picker">';
+        $html = '<div data-image-max-width="'.$image_max_width.'" class="bc2018fw-margin bc2018fw-image-picker">';
 
         $label = $label != '' ? $this->print_label($label, $this->generate_form_field($setting_field_name)) : '';
 
         $html .= $label;
 
-        $html .= sprintf('<div>%1$s</div>', $this->print_image_from_attachment_id($current_value));
+        $html .= sprintf('<div>%1$s</div>', $this->print_image_from_attachment_id($current_value, $image_max_width));
         $html .= sprintf('<p><a class="bc2018fw-button-small bc2018fw-image-picker-button bc2018fw-button bc2018fw-button-primary" %1$s> <span bc2018fw-icon="image"></span> %2$s</a></p>', $disabled, $button_title);
         $html .= sprintf('<input type="hidden" id="%1$s" class="bc2018fw-image-picker-hidden-input" name="%1$s" value="%3$s" %4$s data-bc2018fw-field="%5$s"  />', $this->generate_form_field($setting_field_name), $this->option_name, $current_value, $disabled, $setting_field_name);
 

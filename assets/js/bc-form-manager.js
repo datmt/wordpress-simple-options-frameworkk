@@ -36,7 +36,8 @@
             const parent = $(this).closest('.bc2018fw-image-picker');
             const image_placeholder_element = parent.find('.bc2018fw-image-preview').first();
             const image_input_field_element = parent.find('.bc2018fw-image-picker-hidden-input').first();
-            open_single_media_selector(image_placeholder_element, image_input_field_element)
+            const image_max_width = parent.attr('data-image-max-width');
+            open_single_media_selector(image_placeholder_element, image_input_field_element, image_max_width);
         });
 
         $('.bc2018fw-multiple-images-picker-button').on('click', function (e) {
@@ -81,7 +82,7 @@
     }
 
 
-    function open_single_media_selector(image_placeholder_element, image_input_field_element) {
+    function open_single_media_selector(image_placeholder_element, image_input_field_element, image_max_width) {
         const frame = wp.media({
             title: "select an image",
             button: {
@@ -93,6 +94,7 @@
         frame.on("select", function () {
             const attachment = frame.state().get("selection").first().toJSON();
             image_placeholder_element.attr('src', attachment.url);
+            image_placeholder_element.attr('width', image_max_width + 'px');
             image_input_field_element.val(attachment.id);
         });
 
