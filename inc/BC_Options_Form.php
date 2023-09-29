@@ -177,13 +177,13 @@ class BC_Options_Form
      * @param $attachment_ids
      * @return string
      */
-    public function display_multiple_images($attachment_ids): string
+    public function display_multiple_images($attachment_ids, $image_width = 250): string
     {
         $html = '<div class="bc2018fw-multiple-image-picker-images">';
 
         if (is_array($attachment_ids) && count($attachment_ids) > 0) {
             foreach ($attachment_ids as $attachment_id) {
-                $html .= $this->print_image_from_attachment_id($attachment_id);
+                $html .= $this->print_image_from_attachment_id($attachment_id, $image_width);
             }
         }
         $html .= '</div>';
@@ -406,15 +406,15 @@ class BC_Options_Form
         return $html . '</div>';
     }
 
-    public function multiple_image_picker($setting_field_name, $button_title, $label, $disabled)
+    public function multiple_image_picker($setting_field_name, $button_title, $label, $disabled, $image_width = 250)
     {
         $disabled = $disabled ? 'disabled' : '';
         $existing_images = $this->get_option_value($setting_field_name);//this is an array
-        $html = '<div data-field-name="' . $this->generate_form_field($setting_field_name) . '" class="bc2018fw-margin bc2018fw-multiple-image-picker"> <!-- multiple image picker -->';
+        $html = '<div data-image-max-width="'.$image_width.'" data-field-name="' . $this->generate_form_field($setting_field_name) . '" class="bc2018fw-margin bc2018fw-multiple-image-picker"> <!-- multiple image picker -->';
 
         $html .= ($label != '' ? $this->print_label_with_field_id($label, $setting_field_name) : '');
 
-        $html .= $this->display_multiple_images($existing_images);
+        $html .= $this->display_multiple_images($existing_images, $image_width);
 
         $html .= $this->print_hidden_images_inputs($existing_images, $setting_field_name);
 
