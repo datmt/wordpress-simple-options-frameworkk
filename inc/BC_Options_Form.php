@@ -271,7 +271,7 @@ class BC_Options_Form
 
     }
 
-    public function raw_hidden($key, $value) : string
+    public function raw_hidden($key, $value): string
     {
         return sprintf('<input type="hidden" name="%1$s" value="%2$s" />', $key, $value);
     }
@@ -410,7 +410,7 @@ class BC_Options_Form
     {
         $disabled = $disabled ? 'disabled' : '';
         $existing_images = $this->get_option_value($setting_field_name);//this is an array
-        $html = '<div data-field-name="'.$this->generate_form_field($setting_field_name).'" class="bc2018fw-margin bc2018fw-multiple-image-picker"> <!-- multiple image picker -->';
+        $html = '<div data-field-name="' . $this->generate_form_field($setting_field_name) . '" class="bc2018fw-margin bc2018fw-multiple-image-picker"> <!-- multiple image picker -->';
 
         $html .= ($label != '' ? $this->print_label_with_field_id($label, $setting_field_name) : '');
 
@@ -678,7 +678,7 @@ class BC_Options_Form
             $html .= $this->raw_hidden($this->generate_form_field($setting_field_name) . '[]', $image_id);
         }
 
-        return $html. '</div>';
+        return $html . '</div>';
 
     }
 }

@@ -67,7 +67,7 @@
             let hidden_inputs_html = '';
             _.each(attachments, function (attachment) {
                 //create images elements and hidden input elements and populate to the containers
-                images_html += `<img style="max-width: 250px;" class="bc2018fw-image-preview" src="${attachment.url}" data-attachment-id="${attachment.id}"/>` ;
+                images_html += `<img style="max-width: 250px;" class="bc2018fw-image-preview" src="${attachment.url}" data-attachment-id="${attachment.id}"/>`;
                 hidden_inputs_html += `<input type="hidden" name="${field_name}[]" value="${attachment.id}"/>`;
             });
 

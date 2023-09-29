@@ -1,11 +1,11 @@
 # wordpress-simple-options-frameworkk
+
 WordPress Options Framework. Create and save your options easily
 
 # How does it work?
 
 The plugin creates a custom post type. All your options will be saved
 as the options of a single post of this post type.
-
 
 # Getting started
 
