@@ -651,10 +651,30 @@ class BC_Options_Form
     }
 
 
-    public function open_tabs($tabs_id = '')
+    public function open_tabs($tabs, $tabs_id = '', $active_tab_index = 0)
     {
         $tabs_id = $tabs_id == '' ? uniqid('bc-tabs-') : $tabs_id;
-        return sprintf('<ul bc2018fw-tab class="bc2018fw-tabs" id="%1$s">', $tabs_id);
+        $headings = sprintf('<ul class="bc2018fw-tab" bc2018fw-tab data-bc2018fw-tab="{connect: \'#%1$s\'}">', $tabs_id);
+
+        //$tabs is an array of array('heading' => '', 'content' => '')aaa
+        //print the heading first
+        foreach ($tabs as $index => $tab) {
+            $headings .= sprintf('<li class="bc2018fw-tab-heading %1$s" data-tab-index="%2$s"><a href="">%3$s</a></li>', $index == $active_tab_index ? 'bc2018fw-active' : '', $index, $tab['heading']) ;
+        }
+
+        //close the tab header
+        $headings .= '</ul>';
+
+        //start printing the tab content
+        $content = sprintf('<ul id="%1$s" class="bc2018fw-switcher bc2018fw-margin">', $tabs_id);
+
+        //print the content
+        foreach ($tabs as $index => $tab) {
+            $content .= $this->single_tab_content($tab['content'], $index == $active_tab_index);
+        }
+
+        return $headings . $content . '</ul>';
+
     }
 
     public function single_tab_content($tab_content, $active = false)

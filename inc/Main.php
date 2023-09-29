@@ -25,6 +25,9 @@ class Main
         $option_form = new BC_Options_Form(Config::OPTION_NAME, $option_id);
 
         echo $option_form->open_container();
+
+        echo $option_form->open_tabs([['heading' => 'First', 'content' => '<h1>First tab</h1>'], ['heading' => 'Second', 'content' => '<h1>Second tab</h1>']]);
+
         echo $option_form->open_form();
 
         echo $option_form->input_field('some_settings', 'text', 'Enter something');
